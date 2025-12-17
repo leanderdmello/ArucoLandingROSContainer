@@ -36,6 +36,7 @@ RUN wget https://avular.blob.core.windows.net/creos/creos_sdk_${CREOS_VERSION}_j
     && cd creos_sdk_client_package_Release_jammy_${TARGETARCH} \
     && dpkg -i creos-utils*_*_${TARGETARCH}.deb \
     && dpkg -i creos-cli*_${TARGETARCH}.deb \
+    && dpkg -i creos-client-dev_*_${TARGETARCH}.deb \
     && cd .. \
     && rm -rf creos_sdk_client_package_Release_jammy_${TARGETARCH} \
     && rm creos_sdk_${CREOS_VERSION}_jammy_${TARGETARCH}.zip
