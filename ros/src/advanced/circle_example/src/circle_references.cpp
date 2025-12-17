@@ -39,7 +39,7 @@ void CircleReferences::Reset(const std::array<float, 3> position, const double y
 creos_sdk_msgs::msg::StateReference CircleReferences::GetNewStateReference(const rclcpp::Time time)
 {
     // Compute the current angle in the circle.
-    double circle_angle = sine_counter_ * angleSteps();
+    double circle_angle = sine_counter_ * -angleSteps();
     auto   reference    = computeNewPosition(middle_point_circle_, initial_heading_, circle_angle);
 
     reference.header.stamp    = time;
@@ -78,12 +78,13 @@ const creos_sdk_msgs::msg::StateReference CircleReferences::computeNewPosition(
     reference.pose.position.y = circle_middle[AxisIndex::kYAxis] + (-circle_radius_m_ * sin_angle);
 
     // Compute feedforward velocity
-    reference.twist.linear.x = circle_radius_m_ * sin_angle * (2 * M_PI / circle_execution_time_s_);
+    reference.twist.linear.x =
+        circle_radius_m_ * sin_angle * (2 * M_PI / -circle_execution_time_s_);
     reference.twist.linear.y =
-        -circle_radius_m_ * cos_angle * (2 * M_PI / circle_execution_time_s_);
+        -circle_radius_m_ * cos_angle * (2 * M_PI / -circle_execution_time_s_);
 
     // Compute feedforward acceleration
-    double pow_2_pi          = std::pow(2 * M_PI / circle_execution_time_s_, 2);
+    double pow_2_pi          = std::pow(2 * M_PI / -circle_execution_time_s_, 2);
     reference.accel.linear.x = circle_radius_m_ * cos_angle * pow_2_pi;
     reference.accel.linear.y = circle_radius_m_ * sin_angle * pow_2_pi;
 

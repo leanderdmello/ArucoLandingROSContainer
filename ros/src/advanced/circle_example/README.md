@@ -1,4 +1,4 @@
-# Cirlce example
+# Circle example
 
 This example will make the Vertex fly in a circle. The example showcases how to perform a takeoff and fly in a circle. It wil use it's current positon to start flying in circles. The radius and the execution time can be changed using CLI arguments.
 

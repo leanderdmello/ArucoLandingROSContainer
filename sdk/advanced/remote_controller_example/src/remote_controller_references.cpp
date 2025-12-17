@@ -59,12 +59,12 @@ const creos_messages::StateReference RemoteControllerReferences::CreateReference
 
     // The right-stick Y-axis moves the drone in the drone's X-axis (forward/backward)
     reference.velocity.linear.x = kCos_max_velocity_horizontal_m * right_stick[AxisIndex::kYAxis] -
-                                  kSin_max_velocity_horizontal_m * right_stick[AxisIndex::kXAxis];
+                                  kSin_max_velocity_horizontal_m * -right_stick[AxisIndex::kXAxis];
     // The right-stick X-axis moves the drone in the drone's Y-axis (left/right)
     reference.velocity.linear.y = kSin_max_velocity_horizontal_m * right_stick[AxisIndex::kYAxis] +
-                                  kCos_max_velocity_horizontal_m * right_stick[AxisIndex::kXAxis];
+                                  kCos_max_velocity_horizontal_m * -right_stick[AxisIndex::kXAxis];
     // The left-stick Y-axis moves the drone in the drone's Z-axis (up/down)
-    reference.velocity.linear.z = kMax_velocity_vertical_m_ * -left_stick[AxisIndex::kYAxis];
+    reference.velocity.linear.z = kMax_velocity_vertical_m_ * left_stick[AxisIndex::kYAxis];
 
     // Update the heading reference
     const float kMax_yaw_rate_step = kMax_yaw_rate_deg_ / 180 * M_PI;
@@ -74,7 +74,7 @@ const creos_messages::StateReference RemoteControllerReferences::CreateReference
     if(yaw_rate_mode_)
     {
         // The left_stick X-axis changes the yaw rate of the drone
-        reference.velocity.angular.z = left_stick[AxisIndex::kXAxis] * kMax_yaw_rate_step;
+        reference.velocity.angular.z = -left_stick[AxisIndex::kXAxis] * kMax_yaw_rate_step;
         reference.orientation_mode =
             creos_messages::StateReference::OrientationMode::kAngularVelocity;
     }
@@ -82,7 +82,7 @@ const creos_messages::StateReference RemoteControllerReferences::CreateReference
     {
         // The left-stick X-axis changes the heading of the drone
         heading_ref_ = heading_ref_.value() +
-                       (left_stick[AxisIndex::kXAxis] * kMax_yaw_rate_step * time_delta_s);
+                       (-left_stick[AxisIndex::kXAxis] * kMax_yaw_rate_step * time_delta_s);
 
         Eigen::Quaterniond orientation(
             Eigen::AngleAxisd(heading_ref_.value(), Eigen::Vector3d::UnitZ()));

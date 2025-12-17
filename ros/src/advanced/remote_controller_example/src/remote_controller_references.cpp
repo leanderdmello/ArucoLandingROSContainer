@@ -59,12 +59,12 @@ const creos_sdk_msgs::msg::StateReference RemoteControllerReferences::CreateRefe
 
     // The right-stick Y-axis moves the drone in the drone's X-axis (forward/backward)
     reference.twist.linear.x = kCos_max_velocity_horizontal_m * right_stick[AxisIndex::kYAxis] -
-                               kSin_max_velocity_horizontal_m * right_stick[AxisIndex::kXAxis];
+                               kSin_max_velocity_horizontal_m * -right_stick[AxisIndex::kXAxis];
     // The right-stick X-axis moves the drone in the drone's Y-axis (left/right)
     reference.twist.linear.y = kSin_max_velocity_horizontal_m * right_stick[AxisIndex::kYAxis] +
-                               kCos_max_velocity_horizontal_m * right_stick[AxisIndex::kXAxis];
+                               kCos_max_velocity_horizontal_m * -right_stick[AxisIndex::kXAxis];
     // The left-stick Y-axis moves the drone in the drone's Z-axis (up/down)
-    reference.twist.linear.z = kMax_velocity_vertical_m_ * -left_stick[AxisIndex::kYAxis];
+    reference.twist.linear.z = kMax_velocity_vertical_m_ * left_stick[AxisIndex::kYAxis];
 
     // Update the heading reference
     const float kMax_yaw_rate_step = kMax_yaw_rate_deg_ / 180 * M_PI;
@@ -74,7 +74,7 @@ const creos_sdk_msgs::msg::StateReference RemoteControllerReferences::CreateRefe
     if(yaw_rate_mode_)
     {
         // The left_stick X-axis changes the yaw rate of the drone
-        reference.twist.angular.z = left_stick[AxisIndex::kXAxis] * kMax_yaw_rate_step;
+        reference.twist.angular.z = -left_stick[AxisIndex::kXAxis] * kMax_yaw_rate_step;
         reference.orientation_mode =
             creos_sdk_msgs::msg::StateReference::ORIENTATION_MODE_ANGULAR_VELOCITY;
     }
@@ -82,7 +82,7 @@ const creos_sdk_msgs::msg::StateReference RemoteControllerReferences::CreateRefe
     {
         // The left-stick X-axis changes the heading of the drone
         heading_ref_ = heading_ref_.value() +
-                       (left_stick[AxisIndex::kXAxis] * kMax_yaw_rate_step * time_delta_s);
+                       (-left_stick[AxisIndex::kXAxis] * kMax_yaw_rate_step * time_delta_s);
 
         tf2::Quaternion quat;
         quat.setRPY(0, 0, heading_ref_.value());
