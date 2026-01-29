@@ -157,6 +157,18 @@ void DroneState::odometryCallback(const nav_msgs::msg::Odometry &msg)
     latest_odometry_ = msg;
 }
 
+std::function<void(const geometry_msgs::msg::PoseWithCovarianceStamped &)>
+    DroneState::GetGlobalPoseCallback()
+{
+    return std::bind(&DroneState::globalPoseCallback, this, std::placeholders::_1);
+}
+
+void DroneState::globalPoseCallback(const geometry_msgs::msg::PoseWithCovarianceStamped &msg)
+{
+    std::lock_guard<std::mutex> lock(global_pose_mutex_);
+    latest_global_pose_ = msg;
+}
+
 std::function<void(const creos_sdk_msgs::msg::State &)> DroneState::GetStateCallback()
 {
     return std::bind(&DroneState::stateCallback, this, std::placeholders::_1);
